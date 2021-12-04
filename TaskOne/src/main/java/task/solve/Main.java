@@ -11,7 +11,7 @@ public class Main {
         Money usdMoney = new Money(usd, new BigDecimal(100));
         Money tenDollars = new Money(usd, new BigDecimal(10));
         Money tenPound = new Money(gbp, new BigDecimal(10));
-       CurrencyExchangeRate poundToUsd = new CurrencyExchangeRate(new BigDecimal(1.5), gbp, usd);
+        CurrencyExchangeRate poundToUsd = new CurrencyExchangeRate(new BigDecimal(1.5), gbp, usd);
 
         //should set usdMoney 110 with scale 2
         usdMoney = usdMoney.add(tenDollars);

@@ -56,10 +56,12 @@ public class BasketClassTest {
     @Test
     public void updateProductQuantity() {
         this.BasketTest.updateProductQuantity(null, 1);
-        assertEquals("{null : 0} -> {null : 1}", 1, this.BasketTest.getProductQuantity(null));
+        assertEquals("!{null : 1}", 1, this.BasketTest.getProductQuantity(null));
 
+        this.BasketTest.addProduct("0", 0);
         this.BasketTest.updateProductQuantity("0", 0);
         assertThat(this.BasketTest.getProducts(), hasItems("0"));
+
     }
 
     @Test

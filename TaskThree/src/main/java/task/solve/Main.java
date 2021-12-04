@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        Initializations
         Random random = new Random();
-        int urlNum = 5;//random.nextInt(5);
+        int urlNum = random.nextInt(10) + 5;
         int threadNum = 50;
         int clickNum = 10;
 
@@ -16,29 +16,42 @@ public class Main {
         for (int i = 0; i < urlNum; i++) {
             tempMap.put(String.valueOf(i), 0);
         }
-//        List<String> urlList = new ArrayList<>(urlNum);
-//        urlList.addAll(tempMap.keySet());
         urlStats urlStat = new urlStats(tempMap);
-        List<String> urlList = urlStat.getList();
 
-//        UserActivity
-        ExecutorService users = Executors.newFixedThreadPool(threadNum);
-//        for (int i = 0; i < threadNum; i++) {
-            for (int i = 0; i < clickNum * threadNum; i++) {
-                String urlCurr = urlList.get(random.nextInt(urlNum));
-                Future<String> act = users.submit(new userActivity(urlCurr));
-                urlStat.updateStat(act.get());
-            }
-//        }
-
-        users.shutdown();
+//      UserActivity
+        Thread[] threads = new Thread[threadNum];
+        for (int i = 0; i < threadNum; i++) {
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    userActivity[] users = new userActivity[clickNum];
+                    for (int j = 0; j < clickNum; j++) {
+                        users[j] = new userActivity(urlStat.getList().get(random.nextInt(urlNum)));
+                        users[j].run();
+                        urlStat.updateStat(users[j].getUrl());
+                    }
+                }
+            });
+        }
+        for (int i = 0; i < threadNum; i++) {
+            threads[i].start();
+        }
 
 //        Result
+        try {
+            for (int i = 0; i < threadNum; i++) {
+                threads[i].join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("urlNum = " + urlNum);
         urlStat.urlStatView();
     }
 }
 
-class userActivity implements Callable<String> {
+
+class userActivity implements Runnable {
 
     private String url;
     public userActivity(String url) {
@@ -46,10 +59,12 @@ class userActivity implements Callable<String> {
     }
 
     @Override
-    public String call() throws Exception {
-//        wait(100);
-        System.out.println(this.url);
-        return url;
+    public void run() {
+        System.out.println("Thread: " + Thread.currentThread().getName() + " url = " + this.url);
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 }
 
@@ -69,9 +84,10 @@ class urlStats {
         urlList.addAll(this.urlStat.keySet());
         return urlList;
     }
+
     public void urlStatView() {
         int sum = 0;
-        for (String key: this.urlStat.keySet()) {
+        for (String key : this.urlStat.keySet()) {
             sum += this.urlStat.get(key);
         }
         System.out.println("Full clicks = " + sum);

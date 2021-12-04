@@ -6,15 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="TaskFour" />
+        <module name="TaskThree" />
         <module name="TaskOne" />
         <module name="TaskTwo" />
-        <module name="TaskThree" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="TaskOne" options="--add-exports java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED" />
+      <module name="TaskFour" options="--add-exports java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED" />
+      <module name="TaskOne" options="" />
     </option>
   </component>
 </project>

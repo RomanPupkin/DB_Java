@@ -51,14 +51,13 @@ public class Main {
 }
 
 
-class userActivity implements Runnable {
+class userActivity {
 
     private String url;
     public userActivity(String url) {
         this.url = url;
     }
 
-    @Override
     public void run() {
         System.out.println("Thread: " + Thread.currentThread().getName() + " url = " + this.url);
     }

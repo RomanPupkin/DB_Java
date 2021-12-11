@@ -36,7 +36,7 @@ public class App {
         System.out.println(avgPetalSquare);
 
         //get flowers grouped by Petal size (Petal.SMALL, etc.)
-        Map groupsByPetalSize = helper.groupBy(e -> Iris.classifyByPatel((Iris) e));
+        Map groupsByPetalSize = helper.groupBy(Iris::classifyByPatel);
         System.out.println(groupsByPetalSize);
 
         //get max sepal width for flowers grouped by species
